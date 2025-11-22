@@ -1,0 +1,8 @@
+{
+    "model_path": "model.pth",
+    "data_dir": "Hw1_dataset",
+    "log_dir": "logs/run1",
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "epochs": 50
+}
