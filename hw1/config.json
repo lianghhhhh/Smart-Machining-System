@@ -4,5 +4,7 @@
     "log_dir": "logs/run1",
     "batch_size": 32,
     "learning_rate": 0.001,
-    "epochs": 50
+    "epochs": 50,
+    "val_result": "val_P76144671.csv",
+    "test_result": "test_P76144671.csv"
 }

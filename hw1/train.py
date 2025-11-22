@@ -2,14 +2,14 @@ import os
 import torch
 from torch import nn
 from model import CnnModel
-from torch.utils.data import TensorDataset, DataLoader
-from utils import getData, splitTrainVal
 from torch.utils.tensorboard import SummaryWriter
+from utils import getData, splitTrainVal, saveResults
+from torch.utils.data import TensorDataset, DataLoader
 
 def trainModel(config):
     print(f"Training model...")
-    data, labels = getData(config['data_dir'], mode='train')
-    train_data, train_labels, val_data, val_labels = splitTrainVal(data, labels, val_ratio=0.1)
+    filenames, data, labels = getData(config['data_dir'], mode='train')
+    train_filenames, train_data, train_labels, val_filenames, val_data, val_labels = splitTrainVal(filenames, data, labels, val_ratio=0.1)
     train_dataset = TensorDataset(torch.tensor(train_data), torch.tensor(train_labels))
     val_dataset = TensorDataset(torch.tensor(val_data), torch.tensor(val_labels))
     train_loader = DataLoader(train_dataset, batch_size=config['batch_size'], shuffle=True)
@@ -28,6 +28,7 @@ def trainModel(config):
     model.to(device)
     total_epochs = config['epochs']
     writer = SummaryWriter(log_dir=config['log_dir'])
+    val_results = []
 
     for epoch in range(total_epochs):
         train_acc = 0.0
@@ -61,6 +62,9 @@ def trainModel(config):
                 val_acc += (outputs.argmax(dim=1) == targets).sum().item()
                 val_loss += batch_loss.item()
 
+                if epoch == total_epochs - 1: # Save validation results in the last epoch
+                    val_results.extend(outputs.argmax(dim=1).cpu().numpy())
+
         train_acc /= len(train_dataset)
         train_loss /= len(train_loader)
         val_acc /= len(val_dataset)
@@ -78,3 +82,6 @@ def trainModel(config):
         
     writer.close()
     torch.save(model.state_dict(), model_path)
+    print(f"Model saved to {model_path}")
+    saveResults(val_filenames, val_results, config['val_result'])
+    print(f"Validation results saved to {config['val_result']}")
