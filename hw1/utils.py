@@ -18,7 +18,7 @@ def getData(data_dir, mode):
         data[i, 0, :, :] = cv2.resize(img, (300, 300)) # resize to 300x300
 
     if label_path:
-        labels = np.zeros((len(filenames),), dtype=np.uint8)
+        labels = np.zeros((len(filenames)), dtype=np.uint8)
         with open(label_path, 'r') as f:
             reader = csv.reader(f)
             next(reader)  # Skip header

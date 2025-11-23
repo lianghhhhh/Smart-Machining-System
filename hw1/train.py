@@ -7,7 +7,7 @@ from utils import getData, splitTrainVal, saveResults
 from torch.utils.data import TensorDataset, DataLoader
 
 def trainModel(config):
-    print(f"Training model...")
+    print(f"Loading data...")
     filenames, data, labels = getData(config['data_dir'], mode='train')
     train_filenames, train_data, train_labels, val_filenames, val_data, val_labels = splitTrainVal(filenames, data, labels, val_ratio=0.1)
     train_dataset = TensorDataset(torch.tensor(train_data), torch.tensor(train_labels))
@@ -15,6 +15,7 @@ def trainModel(config):
     train_loader = DataLoader(train_dataset, batch_size=config['batch_size'], shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=config['batch_size'], shuffle=False)
 
+    print(f"Training model...")
     model = CnnModel()
     model_path = config['model_path']
     if os.path.exists(model_path):
