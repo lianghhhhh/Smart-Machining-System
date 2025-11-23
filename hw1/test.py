@@ -10,6 +10,7 @@ def testModel(config):
 
     model = CnnModel()
     model.load_state_dict(torch.load(config['model_path']))
+    print('Testing using model from', config['model_path'])
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model.to(device)
 
