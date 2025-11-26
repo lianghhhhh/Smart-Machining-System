@@ -1,6 +1,6 @@
 import json
 from test import testModel
-from train import trainModel
+from train import trainBinaryModel, trainMultiClassModel
 
 def selectMode():
     print("Select mode:")
@@ -18,7 +18,8 @@ if __name__ == "__main__":
     mode = selectMode()
     config = loadConfig("config.json")
     if mode == '1':
-        trainModel(config)
+        trainBinaryModel(config)
+        trainMultiClassModel(config)
     elif mode == '2':
         testModel(config)
     else:
