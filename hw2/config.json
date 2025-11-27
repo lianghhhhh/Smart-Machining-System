@@ -1,11 +1,18 @@
 {
-    "binary_model_path": "run1_binary.pth",
-    "multi_model_path": "run1_multi.pth",
     "data_dir": "Hw2_dataset",
     "log_dir": "logs/run1",
-    "batch_size": 32,
-    "learning_rate": 0.001,
-    "epochs": 500,
     "val_result": "val_P76144671.csv",
-    "test_result": "test_P76144671.csv"
+    "test_result": "test_P76144671.csv",
+    "binary_model":{
+        "model_path": "binary_run1.pth",
+        "batch_size": 32,
+        "learning_rate": 0.001,
+        "epochs": 1
+    },
+    "multi_model":{
+        "model_path": "multi_run1.pth",
+        "batch_size": 32,
+        "learning_rate": 0.001,
+        "epochs": 1
+    }
 }

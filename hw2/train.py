@@ -12,22 +12,22 @@ def trainBinaryModel(config):
     train_filenames, train_data, train_labels, val_filenames, val_data, val_labels = splitTrainVal(filenames, data, labels, val_ratio=0.1)
     train_dataset = TensorDataset(torch.tensor(train_data), torch.tensor(train_labels))
     val_dataset = TensorDataset(torch.tensor(val_data), torch.tensor(val_labels))
-    train_loader = DataLoader(train_dataset, batch_size=config['batch_size'], shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=config['batch_size'], shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=config['binary_model']['batch_size'], shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=config['binary_model']['batch_size'], shuffle=False)
 
     print(f"Training binary model...")
     model = BinaryModel()
-    model_path = config['binary_model_path']
+    model_path = config['binary_model']['model_path']
     if os.path.exists(model_path):
         model.load_state_dict(torch.load(model_path))
         print(f"Loaded model weights from {model_path}")
 
     loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=config['learning_rate'])
+    optimizer = torch.optim.Adam(model.parameters(), lr=config['binary_model']['learning_rate'])
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
     model.to(device)
-    total_epochs = config['epochs']
+    total_epochs = config['binary_model']['epochs']
     writer = SummaryWriter(log_dir=config['log_dir'])
     val_results = []
 
@@ -97,22 +97,22 @@ def trainMultiClassModel(config):
     train_filenames, train_data, train_labels, val_filenames, val_data, val_labels = splitTrainVal(filenames, data, labels, val_ratio=0.1)
     train_dataset = TensorDataset(torch.tensor(train_data), torch.tensor(train_labels))
     val_dataset = TensorDataset(torch.tensor(val_data), torch.tensor(val_labels))
-    train_loader = DataLoader(train_dataset, batch_size=config['batch_size'], shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=config['batch_size'], shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=config['multi_model']['batch_size'], shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=config['multi_model']['batch_size'], shuffle=False)
 
     print(f"Training multi-class model...")
     model = MultiClassModel()
-    model_path = config['multi_model_path']
+    model_path = config['multi_model']['model_path']
     if os.path.exists(model_path):
         model.load_state_dict(torch.load(model_path))
         print(f"Loaded model weights from {model_path}")
 
     loss_fn = nn.BCEWithLogitsLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=config['learning_rate'])
+    optimizer = torch.optim.Adam(model.parameters(), lr=config['multi_model']['learning_rate'])
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
     model.to(device)
-    total_epochs = config['epochs']
+    total_epochs = config['multi_model']['epochs']
     writer = SummaryWriter(log_dir=config['log_dir'])
     val_results = []
 
