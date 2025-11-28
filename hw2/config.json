@@ -4,15 +4,15 @@
     "val_result": "val_P76144671.csv",
     "test_result": "test_P76144671.csv",
     "binary_model":{
-        "model_path": "binary_run1.pth",
+        "model_path": "run1_binary.pth",
         "batch_size": 32,
-        "learning_rate": 0.001,
-        "epochs": 1
+        "learning_rate": 1e-5,
+        "epochs": 200
     },
     "multi_model":{
-        "model_path": "multi_run1.pth",
+        "model_path": "run1_multi.pth",
         "batch_size": 32,
-        "learning_rate": 0.001,
-        "epochs": 1
+        "learning_rate": 1e-5,
+        "epochs": 200
     }
 }

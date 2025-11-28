@@ -9,10 +9,10 @@ def getData(data_dir, mode):
         label_path = os.path.join(data_dir, 'public', 'labels.csv')
 
         filenames = sorted(os.listdir(img_path))
-        data = np.zeros((len(filenames), 1, 1600, 256), dtype=np.float32) # image size 1600x256, grayscale
+        data = np.zeros((len(filenames), 1, 256, 256), dtype=np.float32) # image size 256x256, grayscale
         for i, img_name in enumerate(filenames):
             img = cv2.imread(os.path.join(img_path, img_name), cv2.IMREAD_GRAYSCALE)
-            data[i, 0, :, :] = cv2.resize(img, (256, 1600)) # resize to 1600x256
+            data[i, 0, :, :] = cv2.resize(img, (256, 256)) # resize to 256x256
 
         labels = np.zeros((len(filenames)), dtype=np.uint8)
         with open(label_path, 'r') as f:
@@ -51,10 +51,10 @@ def getData(data_dir, mode):
         labels = np.array(labels)
 
         filenames = sorted(defect_filenames)
-        data = np.zeros((len(filenames), 1, 1600, 256), dtype=np.float32) # image size 1600x256, grayscale
+        data = np.zeros((len(filenames), 1, 512, 512), dtype=np.float32) # image size 512x512, grayscale
         for i, img_name in enumerate(filenames):
             img = cv2.imread(os.path.join(img_path, img_name), cv2.IMREAD_GRAYSCALE)
-            data[i, 0, :, :] = cv2.resize(img, (256, 1600)) # resize to 1600x256
+            data[i, 0, :, :] = cv2.resize(img, (512, 512)) # resize to 512x512
 
         return filenames, data, labels
 
@@ -62,12 +62,14 @@ def getData(data_dir, mode):
         img_path = os.path.join(data_dir, 'private', 'images')
 
         filenames = sorted(os.listdir(img_path))
-        data = np.zeros((len(filenames), 1, 1600, 256), dtype=np.float32) # image size 1600x256, grayscale
+        data_1 = np.zeros((len(filenames), 1, 256, 256), dtype=np.float32) # image size 256x256, grayscale
+        data_2 = np.zeros((len(filenames), 1, 512, 512), dtype=np.float32) # image size 512x512, grayscale
         for i, img_name in enumerate(filenames):
             img = cv2.imread(os.path.join(img_path, img_name), cv2.IMREAD_GRAYSCALE)
-            data[i, 0, :, :] = cv2.resize(img, (256, 1600)) # resize to 1600x256
+            data_1[i, 0, :, :] = cv2.resize(img, (256, 256)) # resize to 256x256
+            data_2[i, 0, :, :] = cv2.resize(img, (512, 512)) # resize to 512x512
 
-        return filenames, data
+        return filenames, data_1, data_2
     
 def splitTrainVal(filenames, data, labels, val_ratio=0.1):
     total_size = len(data)

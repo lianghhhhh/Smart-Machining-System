@@ -5,9 +5,9 @@ from torch.utils.data import TensorDataset, DataLoader
 
 def testModel(config):
     print("Loading test data...")
-    filenames, data = getData(config['data_dir'], mode='test')
-    test_dataset = TensorDataset(torch.tensor(data))
-    test_loader = DataLoader(test_dataset, batch_size=config['binary_model']['batch_size'], shuffle=False)
+    filenames, data_1, data_2 = getData(config['data_dir'], mode='test') # data_1: for model_1, data_2: for model_2
+    test_dataset_1 = TensorDataset(torch.tensor(data_1))
+    test_loader_1 = DataLoader(test_dataset_1, batch_size=config['binary_model']['batch_size'], shuffle=False)
 
     binary_model = BinaryModel()
     binary_model.load_state_dict(torch.load(config['binary_model']['model_path']))
@@ -17,7 +17,7 @@ def testModel(config):
     binary_model.eval()
     predictions = []
     with torch.no_grad():
-        for test_data in test_loader:
+        for test_data in test_loader_1:
             inputs = test_data[0].to(device)
             outputs = binary_model(inputs)
             
@@ -37,7 +37,7 @@ def testModel(config):
             if pred == 0:
                 final_results.append([1, 0, 0, 0, 0])
             else:
-                input_dataset = TensorDataset(torch.tensor(data[i].reshape(1, 1, 1600, 256)))
+                input_dataset = TensorDataset(torch.tensor(data_2[i].reshape(1, 1, 512, 512)))
                 input_loader = DataLoader(input_dataset, batch_size=config['multi_model']['batch_size'], shuffle=False)
                 for batch in input_loader:
                     inputs = batch[0].to(device)
