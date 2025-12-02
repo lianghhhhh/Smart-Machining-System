@@ -12,8 +12,8 @@ def trainBinaryModel(config):
     train_filenames, train_data, train_labels, val_filenames, val_data, val_labels = splitTrainVal(filenames, data, labels, val_ratio=0.1)
     train_dataset = TensorDataset(torch.tensor(train_data), torch.tensor(train_labels))
     val_dataset = TensorDataset(torch.tensor(val_data), torch.tensor(val_labels))
-    train_loader = DataLoader(train_dataset, batch_size=config['binary_model']['batch_size'], shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=config['binary_model']['batch_size'], shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=config['binary_model']['batch_size'], shuffle=True, num_workers=2)
+    val_loader = DataLoader(val_dataset, batch_size=config['binary_model']['batch_size'], shuffle=False, num_workers=2)
 
     print(f"Training binary model...")
     model = BinaryModel()
@@ -81,7 +81,7 @@ def trainBinaryModel(config):
               f"Train Loss: {train_loss}, Train Acc: {train_acc:} | "
               f"Val Loss: {val_loss}, Val Acc: {val_acc}")
         
-        if (epoch + 1) % 50 == 0:
+        if (epoch + 1) % 20 == 0:
             torch.save(model.state_dict(), f'models/binary_{epoch+1}.pth')
             print(f"Model checkpoint saved to models/binary_{epoch+1}.pth")
         
@@ -97,8 +97,8 @@ def trainMultiClassModel(config):
     train_filenames, train_data, train_labels, val_filenames, val_data, val_labels = splitTrainVal(filenames, data, labels, val_ratio=0.1)
     train_dataset = TensorDataset(torch.tensor(train_data), torch.tensor(train_labels))
     val_dataset = TensorDataset(torch.tensor(val_data), torch.tensor(val_labels))
-    train_loader = DataLoader(train_dataset, batch_size=config['multi_model']['batch_size'], shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=config['multi_model']['batch_size'], shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=config['multi_model']['batch_size'], shuffle=True, num_workers=2)
+    val_loader = DataLoader(val_dataset, batch_size=config['multi_model']['batch_size'], shuffle=False, num_workers=2)
 
     print(f"Training multi-class model...")
     model = MultiClassModel()
@@ -167,7 +167,7 @@ def trainMultiClassModel(config):
         print(f"Epoch {epoch+1}/{total_epochs} | "
               f"Train Loss: {train_loss}, Train Acc: {train_acc:} | "
               f"Val Loss: {val_loss}, Val Acc: {val_acc}")
-        if (epoch + 1) % 50 == 0:
+        if (epoch + 1) % 20 == 0:
             torch.save(model.state_dict(), f'models/multi_{epoch+1}.pth')
             print(f"Model checkpoint saved to models/multi_{epoch+1}.pth")
 
