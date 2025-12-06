@@ -107,24 +107,19 @@ def plotData(plot_data, plot_data_labels, model, device, columns, scaler):
     preds_real = scaler.inverse_transform(preds_scaled)
     targets_real = scaler.inverse_transform(targets_scaled)
     
-    # Plot 45 features to 5 images
-    for i in range(5):
-        num_plots = 9
-        plt.figure(figsize=(15, 10))
-        
-        for j in range(num_plots):
-            idx = i * num_plots + j  
-            col_name = columns[idx]
-            plt.subplot(3, 3, j+1)
-            plt.plot(targets_real[:, idx], label='Actual', alpha=0.7, color='blue')
-            plt.plot(preds_real[:, idx], label='Predicted', alpha=0.7, color='red')
-            plt.title(col_name)
-            plt.legend()
-
+    # plot a faeture in a figure, total 45
+    for i in range(45):
+        plt.figure(figsize=(10, 5))
+        col_name = columns[i]
+        plt.plot(targets_real[:, i], label='Actual', alpha=0.7, color='blue')
+        plt.plot(preds_real[:, i], label='Predicted', alpha=0.7, color='red')
+        plt.title(col_name)
+        plt.legend()
         plt.tight_layout()
-        plt.savefig(f"exp_14_results_{i+1}.png")
-        print(f"Plot saved to exp_14_results_{i+1}.png")
+        plt.savefig(f"exp_14_results/feature_{i+1}.png")
         plt.close()
+    
+    print("Plots saved to exp_14_results/")
 
 def saveResults(results, filepath, columns):
     with open(filepath, 'w', newline='') as f:

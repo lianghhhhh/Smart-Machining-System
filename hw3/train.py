@@ -1,3 +1,4 @@
+import os
 import torch
 from torch import nn
 from model import CncPredictor
@@ -19,12 +20,15 @@ def trainModel(config):
     print(f"Training model...")
     data_size = len(config['columns'])
     model = CncPredictor(input_size=data_size, hidden_size=config['hidden_size'], output_size=data_size, num_layers=config['num_layers'], dropout=config['dropout'])
-    
+    model_path = config['model_path']
+    if os.path.exists(model_path):
+        model.load_state_dict(torch.load(model_path))
+        print(f"Model loaded from {model_path}")
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model.to(device)
     
     loss_fn = nn.MSELoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=config['learning_rate'], weight_decay=1e-5)
+    optimizer = torch.optim.Adam(model.parameters(), lr=config['learning_rate'])
     writer = SummaryWriter(log_dir=config['log_dir'])
 
     for epoch in range(config['epochs']):
@@ -57,7 +61,7 @@ def trainModel(config):
         writer.add_scalar('Loss/Train', train_loss, epoch+1)
         writer.add_scalar('Loss/Val', val_loss, epoch+1)
 
-    torch.save(model.state_dict(), config['model_path'])
+    torch.save(model.state_dict(), model_path)
     print(f"Model saved.")
     
     # Plot experiment 14 data
