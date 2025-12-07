@@ -67,3 +67,4 @@ def trainModel(config):
     # Plot experiment 14 data
     print("Generating plots for Experiment 14...")
     plotData(plot_data, plot_data_labels, model, device, config['columns'], scaler)
+    

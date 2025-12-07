@@ -43,7 +43,7 @@ def getData(data_dir, mode, columns, window_size):
                 all_data.append(data_scaled[i:i+window_size])
                 labels.append(data_scaled[i+window_size])
         
-        # Get experiment_1.csv file for plotting
+        # Get experiment_14.csv file for plotting
         if 'experiment_14.csv' in files:
             df_14 = pd.read_csv(os.path.join(folder_path, 'experiment_14.csv'))
             data_14 = scaler.transform(df_14[columns].values)
@@ -72,7 +72,7 @@ def getData(data_dir, mode, columns, window_size):
                 data = df[columns].values
                 data_scaled = scaler.transform(data) # Normalize
                 
-                # Create input window (should be exactly one window per sample file usually)
+                # Create input window
                 if len(data_scaled) >= window_size:
                     # Take the LAST window_size rows to predict the future
                     all_data.append(data_scaled[-window_size:])

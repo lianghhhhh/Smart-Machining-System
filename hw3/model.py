@@ -3,11 +3,11 @@
 import torch.nn as nn
 
 class CncPredictor(nn.Module):
-    def __init__(self, input_size=45, hidden_size=30, output_size=45, num_layers=2, dropout=0.2):
+    def __init__(self, input_size=45, hidden_size=128, output_size=45, num_layers=2, dropout=0.2):
         super(CncPredictor, self).__init__()
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, dropout=dropout, batch_first=True)
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, dropout=dropout, batch_first=True, bidirectional=True)
         self.model = nn.Sequential(
-            nn.Linear(hidden_size, hidden_size//2),
+            nn.Linear(hidden_size * 2, hidden_size//2),
             nn.ReLU(),
             nn.Dropout(dropout),
             nn.Linear(hidden_size//2, output_size)
